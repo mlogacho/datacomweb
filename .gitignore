@@ -1,0 +1,10 @@
+node_modules
+*.wpress
+extracted_site/
+wpress_extractor.py
+datacom-ec/uploads/
+datacom-ec/upgrade/
+datacom-ec/cache/
+datacom-ec/wflogs/
+.DS_Store
+*.log

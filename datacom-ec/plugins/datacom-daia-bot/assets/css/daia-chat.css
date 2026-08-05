@@ -1,0 +1,302 @@
+/* DAIA Chat Widget Premium Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+#daia-chat-widget {
+    font-family: 'Inter', sans-serif;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Launcher */
+#daia-chat-launcher {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    padding: 8px 16px 8px 8px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+#daia-chat-launcher:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.daia-avatar-launcher {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid #3b82f6;
+}
+
+.daia-launcher-text {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+/* Chat Window */
+#daia-chat-window {
+    width: 380px;
+    height: 600px;
+    max-height: 80vh;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.5) inset;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 20px;
+    transform-origin: bottom right;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.daia-chat-closed #daia-chat-window {
+    transform: scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.daia-chat-open #daia-chat-launcher {
+    transform: scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+}
+
+/* Header */
+.daia-chat-header {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.daia-header-info {
+    display: flex;
+    align-items: center;
+}
+
+.daia-header-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+.daia-header-info h4 {
+    margin: 0 0 4px 0 !important;
+    font-size: 16px !important;
+    font-weight: 600;
+    color: white !important;
+    line-height: 1;
+}
+
+.daia-status {
+    font-size: 12px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+}
+
+.daia-status::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #10b981;
+    border-radius: 50%;
+    margin-right: 6px;
+    box-shadow: 0 0 8px #10b981;
+}
+
+#daia-close-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    font-size: 24px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    line-height: 1;
+}
+
+#daia-close-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* Messages Area */
+.daia-chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.daia-chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+.daia-chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.15);
+    border-radius: 10px;
+}
+
+.daia-message {
+    display: flex;
+    max-width: 85%;
+    animation: daiaFadeInUp 0.4s ease forwards;
+}
+
+.daia-message-user {
+    align-self: flex-end;
+}
+
+.daia-message-assistant {
+    align-self: flex-start;
+}
+
+.daia-bubble {
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.daia-message-assistant .daia-bubble {
+    background: white;
+    color: #334155;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.daia-message-user .daia-bubble {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+}
+
+/* Typing Indicator */
+.daia-typing-bubble {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 16px 20px !important;
+}
+
+.daia-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #94a3b8;
+    border-radius: 50%;
+    animation: daiaTyping 1.4s infinite ease-in-out both;
+}
+
+.daia-dot:nth-child(1) { animation-delay: -0.32s; }
+.daia-dot:nth-child(2) { animation-delay: -0.16s; }
+
+/* Input Area */
+.daia-chat-input-area {
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-top: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#daia-chat-input {
+    flex: 1;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(248, 250, 252, 0.8);
+    padding: 12px 16px;
+    border-radius: 24px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+
+#daia-chat-input:focus {
+    border-color: #3b82f6;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+#daia-send-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+#daia-send-btn:hover {
+    background: #2563eb;
+    transform: scale(1.05);
+}
+
+#daia-send-btn:active {
+    transform: scale(0.95);
+}
+
+/* Animations */
+@keyframes daiaFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes daiaTyping {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    #daia-chat-window {
+        width: calc(100vw - 40px);
+        height: calc(100vh - 100px);
+    }
+}
