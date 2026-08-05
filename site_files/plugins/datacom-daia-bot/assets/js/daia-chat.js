@@ -6,14 +6,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const messagesContainer = document.getElementById('daia-chat-messages');
     const inputField = document.getElementById('daia-chat-input');
     const sendBtn = document.getElementById('daia-send-btn');
+    const inputArea = document.getElementById('daia-chat-input-area');
+    
+    // LOPDP Consent Elements
+    const consentOverlay = document.getElementById('daia-consent-overlay');
+    const consentCheckbox = document.getElementById('daia-consent-checkbox');
+    const consentBtn = document.getElementById('daia-consent-btn');
 
     let conversationHistory = [];
 
-    // Cargar historial de la sesión
+    // Check Consent state
+    const hasConsent = localStorage.getItem('daiaConsent');
     const savedSession = sessionStorage.getItem('daiaConversation');
-    if (savedSession) {
+
+    if (savedSession && hasConsent) {
         conversationHistory = JSON.parse(savedSession);
         renderHistory();
+        consentOverlay.style.display = 'none';
+        inputArea.style.display = 'flex';
         // Si hay historial, mostrar chat abierto
         if(conversationHistory.length > 1) {
             openChat();
@@ -21,7 +31,27 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         // Mensaje inicial de bienvenida
         addMessage('assistant', '¡Hola! 👋 Soy DAIA, tu asesora comercial virtual en DataCom. \n\nMe encantaría ayudarte a impulsar tu empresa con nuestra tecnología. ¿Qué proyectos tienes en mente el día de hoy?\n\n(Si gustas, puedes dejarme tu nombre y correo para brindarte una atención más personalizada 😉)');
+        
+        if (hasConsent) {
+            consentOverlay.style.display = 'none';
+            inputArea.style.display = 'flex';
+        } else {
+            consentOverlay.style.display = 'flex';
+            inputArea.style.display = 'none';
+        }
     }
+
+    // Consent Logic
+    consentCheckbox.addEventListener('change', function() {
+        consentBtn.disabled = !this.checked;
+    });
+
+    consentBtn.addEventListener('click', function() {
+        localStorage.setItem('daiaConsent', 'true');
+        consentOverlay.style.display = 'none';
+        inputArea.style.display = 'flex';
+        inputField.focus();
+    });
 
     // Toggle Chat Window
     launcher.addEventListener('click', openChat);
