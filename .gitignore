@@ -8,3 +8,14 @@ datacom-ec/cache/
 datacom-ec/wflogs/
 .DS_Store
 *.log
+
+# Ignore all plugins and themes to avoid tracking thousands of files
+datacom-ec/plugins/*
+!datacom-ec/plugins/datacom-daia-bot/
+datacom-ec/themes/*
+# !datacom-ec/themes/your-custom-theme/
+
+site_files/plugins/*
+!site_files/plugins/datacom-daia-bot/
+site_files/themes/*
+site_files/uploads/*
