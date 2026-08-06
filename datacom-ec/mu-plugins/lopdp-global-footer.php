@@ -34,6 +34,24 @@ function datacom_lopdp_global_footer() {
             #lopdp-global-footer a:hover { color: #0ea5e9 !important; }
             /* Push body up slightly so footer doesn't hide content */
             body { padding-bottom: 35px !important; }
+            /* Unify font for site description (tagline) in legacy header */
+            .description { font-family: 'Inter', Arial, sans-serif !important; font-size: 14px !important; color: #475569 !important; font-style: normal !important; margin-top: 5px; }
+            #header { border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 25px; background: #fff; }
+            #headerimg { max-width: 800px; margin: 0 auto; padding-top: 15px; padding-left: 20px; padding-right: 20px; }
+            hr { display: none !important; } /* Hide the ghost line from theme-compat */
+            /* Justify paragraphs in LOPDP container */
+            .lopdp-container p, .lopdp-container ul { text-align: justify; }
+            /* Replace site title text with logo */
+            #headerimg h1 a {
+                display: block;
+                background: url('/wp-content/recurso-1.png') no-repeat left center;
+                background-size: contain;
+                width: 220px;
+                height: 80px;
+                text-indent: -9999px; /* Hide the text */
+                overflow: hidden;
+            }
+            #headerimg h1 { margin: 0; padding: 0; line-height: 1; }
         </style>
     </div>
     <?php
