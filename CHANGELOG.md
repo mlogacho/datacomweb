@@ -12,6 +12,7 @@ Todos los cambios notables de este proyecto estarán documentados en este archiv
 ### Modificado
 - **Estilos de Cabecera (Legacy)**: Se inyectó CSS personalizado mediante un mu-plugin para reemplazar el título de texto por el logo de Datacom (`Recurso 1.png`) y mejorar las proporciones y alineación del tagline, evitando dependencias estrictas de temas en la página LOPDP.
 - **Bot DAIA (Seguridad)**: Se removió la validación estricta de Nonce (`X-WP-Nonce`) para la API REST pública, solucionando problemas de conexión en sistemas con caché activado.
+- **Banner de Cookies**: Se resolvió una colisión visual (superposición) entre el banner de Cookie Notice y el footer global de LOPDP, aplicando un margen dinámico inferior para que el banner flote por encima del footer.
 
 ## [Anteriores] - 2026-08-05### Añadido
 - **Política de Cookies (LOPDP)**: Implementación de la página oficial de política de cookies requerida por la normativa de Ecuador.

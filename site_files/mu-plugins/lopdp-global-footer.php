@@ -31,9 +31,13 @@ function datacom_lopdp_global_footer() {
             Política de Privacidad y Tratamiento de Datos Personales
         </a>
         <style>
+            #lopdp-global-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #ffffff; border-top: 1px solid #e2e8f0; padding: 10px 0; text-align: center; font-family: 'Inter', Arial, sans-serif; font-size: 13px; z-index: 999999; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+            #lopdp-global-footer a { color: #475569; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: color 0.2s; }
             #lopdp-global-footer a:hover { color: #0ea5e9 !important; }
             /* Push body up slightly so footer doesn't hide content */
-            body { padding-bottom: 35px !important; }
+            body { padding-bottom: 45px !important; }
+            /* Push Cookie Notice banner up so it doesn't collide with the LOPDP footer */
+            #cookie-notice { margin-bottom: 40px !important; box-shadow: 0 -4px 10px rgba(0,0,0,0.2) !important; }
             /* Unify font for site description (tagline) in legacy header */
             .description { font-family: 'Inter', Arial, sans-serif !important; font-size: 14px !important; color: #475569 !important; font-style: normal !important; margin-top: 5px; }
             #header { border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 25px; background: #fff; }
