@@ -33,8 +33,8 @@ add_action( 'plugins_loaded', 'daia_bot_init' );
 
 // Enqueue scripts and styles
 function daia_bot_enqueue_scripts() {
-    wp_enqueue_style( 'daia-bot-style', DAIA_BOT_URL . 'assets/css/daia-chat.css', array(), '1.0.1' );
-    wp_enqueue_script( 'daia-bot-script', DAIA_BOT_URL . 'assets/js/daia-chat.js', array(), '1.0.1', true );
+    wp_enqueue_style( 'daia-bot-style', DAIA_BOT_URL . 'assets/css/daia-chat.css', array(), '1.0.2' );
+    wp_enqueue_script( 'daia-bot-script', DAIA_BOT_URL . 'assets/js/daia-chat.js', array(), '1.0.2', true );
     
     // Pass AJAX URL and REST URL to JS
     wp_localize_script( 'daia-bot-script', 'daiaBotData', array(

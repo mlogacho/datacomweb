@@ -2,9 +2,18 @@
 
 Todos los cambios notables de este proyecto estarán documentados en este archivo.
 
-## [Unreleased] - 2026-08-05
+## [Unreleased] - 2026-08-06
 
 ### Añadido
+- **Bot DAIA (Consentimiento LOPDP)**: Se añadió un checkbox de consentimiento y aviso de privacidad obligatorio antes de iniciar el chat con el bot DAIA.
+- **Página y Footer LOPDP**: Implementación de un footer global con enlace a la "Política de Privacidad y Tratamiento de Datos Personales". La página se auto-aprovisiona en entornos de producción.
+- **Menú Intranet**: Se agregó un enlace directo a `erp.datacom.ec` ("INTRANET") en el menú de navegación principal de Elementor y WordPress.
+
+### Modificado
+- **Estilos de Cabecera (Legacy)**: Se inyectó CSS personalizado mediante un mu-plugin para reemplazar el título de texto por el logo de Datacom (`Recurso 1.png`) y mejorar las proporciones y alineación del tagline, evitando dependencias estrictas de temas en la página LOPDP.
+- **Bot DAIA (Seguridad)**: Se removió la validación estricta de Nonce (`X-WP-Nonce`) para la API REST pública, solucionando problemas de conexión en sistemas con caché activado.
+
+## [Anteriores] - 2026-08-05### Añadido
 - **Política de Cookies (LOPDP)**: Implementación de la página oficial de política de cookies requerida por la normativa de Ecuador.
 - **Banner de Cookies**: Integración del plugin `cookie-notice` con los colores corporativos, bloqueando cookies no esenciales por defecto hasta el consentimiento del usuario.
 - **Forzado de Visualización (Fallback JS)**: Creación de un `mu-plugin` (`force-cookie-notice.php`) para garantizar la aparición del banner en caso de caché estricta o bloqueo de scripts.

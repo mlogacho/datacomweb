@@ -92,8 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(daiaBotData.restUrl, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'X-WP-Nonce': daiaBotData.nonce
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ messages: conversationHistory })
         })
