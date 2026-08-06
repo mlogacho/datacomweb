@@ -19,3 +19,27 @@ site_files/plugins/*
 !site_files/plugins/datacom-daia-bot/
 site_files/themes/*
 site_files/uploads/*
+
+# Additional WordPress root/temp files
+package-lock.json
+package.json
+README.md
+datacom-ec/database.sql
+datacom-ec/index.php
+datacom-ec/languages/
+datacom-ec/maintenance.php
+datacom-ec/maintenance/
+datacom-ec/mu-plugins/elementor-safe-mode.php
+datacom-ec/package.json
+datacom-ec/smush-webp/
+datacom-ec/w3tc-config/
+site_files/cache/
+site_files/database.sql
+site_files/index.php
+site_files/languages/
+site_files/maintenance.php
+site_files/maintenance/
+site_files/mu-plugins/
+site_files/package.json
+site_files/smush-webp/
+site_files/w3tc-config/
