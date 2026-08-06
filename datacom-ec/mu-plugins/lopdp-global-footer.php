@@ -39,3 +39,55 @@ function datacom_lopdp_global_footer() {
     <?php
 }
 add_action( 'wp_footer', 'datacom_lopdp_global_footer', 100 );
+
+// Auto-provision the LOPDP page if it doesn't exist (useful for production deployments)
+function datacom_auto_provision_lopdp_page() {
+    if ( ! get_option( 'datacom_lopdp_page_created' ) ) {
+        $page_slug = 'lopdp';
+        $page = get_page_by_path( $page_slug );
+        
+        if ( ! $page ) {
+            $html_content = <<<EOD
+<div class="lopdp-container" style="max-width: 800px; margin: 0 auto; line-height: 1.6; font-family: Arial, sans-serif;">
+    <h1 style="color: #004e92; text-align: center; margin-bottom: 20px;">Política de Protección de Datos Personales</h1>
+    <p>En <strong>DataCom S.A.</strong> respetamos su privacidad y cumplimos estrictamente con la <strong>Ley Orgánica de Protección de Datos Personales (LOPDP)</strong> de Ecuador. Esta política describe cómo recolectamos, utilizamos, protegemos y compartimos sus datos personales.</p>
+    <h2 style="color: #004e92; margin-top: 30px;">1. Principios del Tratamiento</h2>
+    <p>Tratamos sus datos basándonos en los principios de <strong>licitud, transparencia, proporcionalidad y minimización</strong>. Solo recolectamos los datos estrictamente necesarios para la prestación de nuestros servicios y la atención al cliente.</p>
+    <h2 style="color: #004e92; margin-top: 30px;">2. Derechos de los Titulares (Derechos ARCO)</h2>
+    <p>Como titular de sus datos personales, usted tiene derecho a:</p>
+    <ul>
+        <li><strong>Acceso:</strong> Conocer qué datos suyos tratamos y con qué fin.</li>
+        <li><strong>Rectificación:</strong> Actualizar o corregir datos inexactos.</li>
+        <li><strong>Cancelación / Supresión:</strong> Solicitar la eliminación de sus datos cuando ya no sean necesarios para los fines recolectados.</li>
+        <li><strong>Oposición y Limitación:</strong> Oponerse al tratamiento por motivos específicos y restringir su uso temporalmente.</li>
+        <li><strong>Portabilidad:</strong> Recibir sus datos en un formato estructurado y transferirlos.</li>
+    </ul>
+    <h2 style="color: #004e92; margin-top: 30px;">3. Tiempos de Conservación</h2>
+    <p>Los datos serán conservados únicamente durante el tiempo necesario para los fines del tratamiento o según los plazos que establezcan las leyes.</p>
+    <h2 style="color: #004e92; margin-top: 30px;">4. Medidas de Seguridad</h2>
+    <p>DataCom S.A. ha implementado medidas de seguridad técnicas y organizativas para garantizar la integridad y privacidad de su información.</p>
+    <h2 style="color: #004e92; margin-top: 30px;">5. Contacto del Delegado de Protección de Datos (DPD)</h2>
+    <p>Si tiene alguna duda sobre esta política o desea ejercer sus derechos, puede contactar a nuestro DPD:</p>
+    <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #004e92;">
+        <p><strong>DPD:</strong> Marco Logacho<br>
+        <strong>Correo Electrónico:</strong> <a href="mailto:mlogacho@datacom.net.ec">mlogacho@datacom.net.ec</a><br>
+        <strong>Teléfono:</strong> +593 999952644</p>
+    </div>
+</div>
+EOD;
+            $page_id = wp_insert_post( array(
+                'post_title'    => 'Política de Protección de Datos (LOPDP)',
+                'post_name'     => $page_slug,
+                'post_content'  => $html_content,
+                'post_status'   => 'publish',
+                'post_author'   => 1,
+                'post_type'     => 'page',
+            ) );
+            if ( ! is_wp_error( $page_id ) ) {
+                update_post_meta( $page_id, '_wp_page_template', 'elementor_header_footer' );
+            }
+        }
+        update_option( 'datacom_lopdp_page_created', true );
+    }
+}
+add_action( 'init', 'datacom_auto_provision_lopdp_page' );
