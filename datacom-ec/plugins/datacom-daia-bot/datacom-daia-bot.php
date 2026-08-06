@@ -70,11 +70,17 @@ function daia_bot_output_chat_html() {
             
             <div id="daia-consent-overlay" class="daia-consent-overlay">
                 <div class="daia-consent-content">
-                    <p>Para brindarle un mejor servicio, por favor acepte nuestra política de privacidad.</p>
-                    <label>
-                        <input type="checkbox" id="daia-consent-checkbox">
-                        He leído y acepto la <a href="/lopdp/" target="_blank">Política de Protección de Datos Personales</a>.
-                    </label>
+                    <p class="daia-consent-disclaimer">Estás conversando con un asistente virtual. Tu conversación puede ser almacenada y analizada para mejorar el servicio. Datos tratados conforme a Política de Privacidad. Puedes solicitar hablar con una persona en cualquier momento.</p>
+                    <div class="daia-checkbox-group">
+                        <label>
+                            <input type="checkbox" id="daia-consent-checkbox-1">
+                            He leído y acepto la <a href="/lopdp/" target="_blank">Política de Privacidad</a> y autorizo el tratamiento de mis datos personales para los fines ahí descritos. <span class="daia-required">*</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="daia-consent-checkbox-2">
+                            Acepto recibir comunicaciones comerciales y promocionales por este medio.
+                        </label>
+                    </div>
                     <button id="daia-consent-btn" disabled>Empezar a Chatear</button>
                 </div>
             </div>

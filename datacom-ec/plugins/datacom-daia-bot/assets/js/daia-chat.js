@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // LOPDP Consent Elements
     const consentOverlay = document.getElementById('daia-consent-overlay');
-    const consentCheckbox = document.getElementById('daia-consent-checkbox');
+    const consentCheckbox1 = document.getElementById('daia-consent-checkbox-1');
+    const consentCheckbox2 = document.getElementById('daia-consent-checkbox-2');
     const consentBtn = document.getElementById('daia-consent-btn');
 
     let conversationHistory = [];
@@ -42,12 +43,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Consent Logic
-    consentCheckbox.addEventListener('change', function() {
+    consentCheckbox1.addEventListener('change', function() {
         consentBtn.disabled = !this.checked;
     });
 
     consentBtn.addEventListener('click', function() {
         localStorage.setItem('daiaConsent', 'true');
+        if (consentCheckbox2.checked) {
+            localStorage.setItem('daiaConsentMarketing', 'true');
+        }
         consentOverlay.style.display = 'none';
         inputArea.style.display = 'flex';
         inputField.focus();
