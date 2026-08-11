@@ -4,6 +4,9 @@ Todos los cambios notables de este proyecto estarán documentados en este archiv
 
 ## [Unreleased] - 2026-08-11
 
+### Añadido
+- **DAIA SMTP Nativo**: Se integraron las credenciales oficiales (`daia@datacom.ec`) directamente en el plugin DAIA a través del hook `phpmailer_init`, garantizando que todos los leads captados lleguen de forma confiable a `info@datacom.ec` (evitando filtros de spam o configuraciones SMTP globales).
+
 ### Modificado
 - **Bot DAIA (Ajuste de Comportamiento)**: Se actualizaron las instrucciones del sistema (`system_prompt`) para restringir al bot de inventar información y prohibir rotundamente proporcionar datos sensibles de la empresa (correos internos, información de empleados, representante legal).
 - **Bot DAIA (Enfoque B2B)**: Se añadió una regla para que el bot rechace cordialmente las consultas sobre "internet residencial" o planes para hogares, explicando que el enfoque exclusivo de DataCom es el sector corporativo y empresarial.

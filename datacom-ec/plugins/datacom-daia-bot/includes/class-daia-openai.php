@@ -173,7 +173,24 @@ Esta etiqueta no se le mostrará al usuario, pero es vital para el sistema. Lueg
         
         $headers = array('Content-Type: text/plain; charset=UTF-8');
         
+        // Configurar SMTP específicamente para este envío
+        add_action( 'phpmailer_init', array( $this, 'configure_smtp' ) );
+        
         // Enviar el correo usando wp_mail
         wp_mail( $to, $subject, $message, $headers );
+        
+        // Remover configuración SMTP para no afectar otros correos del sitio
+        remove_action( 'phpmailer_init', array( $this, 'configure_smtp' ) );
+    }
+
+    public function configure_smtp( $phpmailer ) {
+        $phpmailer->isSMTP();
+        $phpmailer->Host       = 'mail.datacom.ec';
+        $phpmailer->SMTPAuth   = true;
+        $phpmailer->Port       = 465;
+        $phpmailer->Username   = 'daia@datacom.ec';
+        $phpmailer->Password   = 'I2Mh)c*)+dGcLoWa';
+        $phpmailer->SMTPSecure = 'ssl';
+        $phpmailer->setFrom( 'daia@datacom.ec', 'DAIA Bot' );
     }
 }
