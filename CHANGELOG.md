@@ -5,6 +5,7 @@ Todos los cambios notables de este proyecto estarán documentados en este archiv
 ## [Unreleased] - 2026-08-11
 
 ### Añadido
+- **Copia de Conversación para el Cliente**: El bot DAIA ahora recopila automáticamente todo el historial del chat y envía una copia de respaldo por correo electrónico al prospecto (usando el correo capturado), agradeciéndole su interés e indicando que un asesor lo contactará.
 - **DAIA SMTP Nativo**: Se integraron las credenciales oficiales (`daia@datacom.ec`) directamente en el plugin DAIA a través del hook `phpmailer_init`, garantizando que todos los leads captados lleguen de forma confiable a `info@datacom.ec` (evitando filtros de spam o configuraciones SMTP globales).
 
 ### Modificado
