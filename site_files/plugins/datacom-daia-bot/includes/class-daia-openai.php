@@ -130,6 +130,8 @@ Esta etiqueta no se le mostrará al usuario, pero es vital para el sistema. Lueg
         if ( isset( $data['choices'][0]['message']['content'] ) ) {
             $reply_text = $data['choices'][0]['message']['content'];
             
+            error_log("DAIA RAW REPLY: " . $reply_text);
+            
             // Check for LEAD tag and process it
             $reply_text = $this->process_lead_tag( $reply_text );
             
@@ -140,19 +142,27 @@ Esta etiqueta no se le mostrará al usuario, pero es vital para el sistema. Lueg
     }
 
     private function process_lead_tag( $text ) {
-        // Buscar la etiqueta <LEAD ... >
-        $pattern = '/<LEAD\s+nombre="([^"]*)"\s+correo="([^"]*)"\s+whatsapp="([^"]*)"\s+servicio="([^"]*)">/i';
+        // Buscar la etiqueta <LEAD ... > (más permisiva)
+        $pattern = '/<LEAD.*?nombre="([^"]*)".*?correo="([^"]*)".*?whatsapp="([^"]*)".*?>/is';
         
         if ( preg_match( $pattern, $text, $matches ) ) {
             $nombre   = $matches[1];
             $correo   = $matches[2];
             $whatsapp = $matches[3];
-            $servicio = $matches[4];
             
+            // Extraer servicio si existe
+            $servicio = 'No especificado';
+            if ( preg_match( '/servicio="([^"]*)"/is', $matches[0], $srv_match ) ) {
+                $servicio = $srv_match[1];
+            }
+            
+            error_log("DAIA LEAD FOUND: Nombre=$nombre, Correo=$correo, WhatsApp=$whatsapp, Servicio=$servicio");
             $this->send_lead_email( $nombre, $correo, $whatsapp, $servicio );
             
-            // Remover la etiqueta del texto que verá el usuario
-            $text = preg_replace( $pattern, '', $text );
+            // Remover la etiqueta del texto que verá el usuario (remover cualquier formato de etiqueta LEAD)
+            $text = preg_replace( '/<LEAD.*?>/is', '', $text );
+        } else {
+            error_log("DAIA NO LEAD TAG FOUND IN TEXT.");
         }
         
         return trim( $text );
@@ -171,17 +181,26 @@ Esta etiqueta no se le mostrará al usuario, pero es vital para el sistema. Lueg
         $message .= "Servicio de Interés: " . sanitize_text_field( $servicio ) . "\n\n";
         $message .= "Por favor, contactar a la brevedad.\n";
         
-        $headers = array('Content-Type: text/plain; charset=UTF-8');
+        $headers = array(
+            'Content-Type: text/plain; charset=UTF-8',
+            'From: DAIA Bot <daia@datacom.ec>'
+        );
         
         // Configurar SMTP específicamente para este envío
         add_action( 'phpmailer_init', array( $this, 'configure_smtp' ) );
         
+        add_action( 'wp_mail_failed', function( $wp_error ) {
+            error_log("DAIA WP_MAIL_FAILED: " . print_r($wp_error, true));
+        } );
+
         // Enviar el correo usando wp_mail
-        wp_mail( $to, $subject, $message, $headers );
+        $result = wp_mail( $to, $subject, $message, $headers );
+        error_log("DAIA WP_MAIL RESULT: " . ($result ? 'SUCCESS' : 'FAILED'));
         
         // Remover configuración SMTP para no afectar otros correos del sitio
         remove_action( 'phpmailer_init', array( $this, 'configure_smtp' ) );
     }
+
 
     public function configure_smtp( $phpmailer ) {
         $phpmailer->isSMTP();
