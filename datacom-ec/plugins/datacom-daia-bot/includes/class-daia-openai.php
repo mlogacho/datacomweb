@@ -133,7 +133,7 @@ Esta etiqueta no se le mostrará al usuario, pero es vital para el sistema. Lueg
             error_log("DAIA RAW REPLY: " . $reply_text);
             
             // Check for LEAD tag and process it
-            $reply_text = $this->process_lead_tag( $reply_text );
+            $reply_text = $this->process_lead_tag( $reply_text, $messages );
             
             return $reply_text;
         }
@@ -141,7 +141,7 @@ Esta etiqueta no se le mostrará al usuario, pero es vital para el sistema. Lueg
         return new WP_Error( 'openai_error', 'Respuesta vacía de OpenAI' );
     }
 
-    private function process_lead_tag( $text ) {
+    private function process_lead_tag( $text, $messages ) {
         // Buscar la etiqueta <LEAD ... > (más permisiva)
         $pattern = '/<LEAD.*?nombre="([^"]*)".*?correo="([^"]*)".*?whatsapp="([^"]*)".*?>/is';
         
@@ -160,7 +160,12 @@ Esta etiqueta no se le mostrará al usuario, pero es vital para el sistema. Lueg
             $this->send_lead_email( $nombre, $correo, $whatsapp, $servicio );
             
             // Remover la etiqueta del texto que verá el usuario (remover cualquier formato de etiqueta LEAD)
-            $text = preg_replace( '/<LEAD.*?>/is', '', $text );
+            $cleaned_text = preg_replace( '/<LEAD.*?>/is', '', $text );
+            
+            // Enviar copia al cliente
+            $this->send_customer_email( $nombre, $correo, $messages, trim( $cleaned_text ) );
+            
+            $text = $cleaned_text;
         } else {
             error_log("DAIA NO LEAD TAG FOUND IN TEXT.");
         }
@@ -198,6 +203,36 @@ Esta etiqueta no se le mostrará al usuario, pero es vital para el sistema. Lueg
         error_log("DAIA WP_MAIL RESULT: " . ($result ? 'SUCCESS' : 'FAILED'));
         
         // Remover configuración SMTP para no afectar otros correos del sitio
+        remove_action( 'phpmailer_init', array( $this, 'configure_smtp' ) );
+    }
+
+    private function send_customer_email( $nombre, $correo, $messages, $final_reply ) {
+        $subject = 'Tu conversación con DAIA - DataCom';
+        
+        $message = "Hola " . sanitize_text_field( $nombre ) . ",\n\n";
+        $message .= "Gracias por contactarte con DataCom. Adjuntamos una copia de tu conversación con nuestro asistente virtual DAIA.\n\n";
+        $message .= "--- INICIO DE LA CONVERSACIÓN ---\n\n";
+        
+        foreach ( $messages as $msg ) {
+            $role = ( $msg['role'] === 'user' ) ? 'Tú' : 'DAIA';
+            if ( $msg['role'] === 'system' ) continue;
+            
+            $message .= $role . ":\n" . sanitize_text_field( $msg['content'] ) . "\n\n";
+        }
+        
+        $message .= "DAIA:\n" . sanitize_text_field( $final_reply ) . "\n\n";
+        $message .= "--- FIN DE LA CONVERSACIÓN ---\n\n";
+        $message .= "Un asesor comercial se pondrá en contacto contigo pronto.\n\n";
+        $message .= "Saludos,\nEl equipo de DataCom\n";
+        
+        $headers = array(
+            'Content-Type: text/plain; charset=UTF-8',
+            'From: DAIA Bot <daia@datacom.ec>'
+        );
+        
+        add_action( 'phpmailer_init', array( $this, 'configure_smtp' ) );
+        $result = wp_mail( $correo, $subject, $message, $headers );
+        error_log("DAIA CUSTOMER WP_MAIL RESULT TO $correo: " . ($result ? 'SUCCESS' : 'FAILED'));
         remove_action( 'phpmailer_init', array( $this, 'configure_smtp' ) );
     }
 
