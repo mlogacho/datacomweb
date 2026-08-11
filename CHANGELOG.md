@@ -2,9 +2,13 @@
 
 Todos los cambios notables de este proyecto estarán documentados en este archivo.
 
-## [Unreleased] - 2026-08-06
+## [Unreleased] - 2026-08-11
 
-### Añadido
+### Modificado
+- **Bot DAIA (Ajuste de Comportamiento)**: Se actualizaron las instrucciones del sistema (`system_prompt`) para restringir al bot de inventar información y prohibir rotundamente proporcionar datos sensibles de la empresa (correos internos, información de empleados, representante legal).
+- **Bot DAIA (Enfoque B2B)**: Se añadió una regla para que el bot rechace cordialmente las consultas sobre "internet residencial" o planes para hogares, explicando que el enfoque exclusivo de DataCom es el sector corporativo y empresarial.
+
+## [Anteriores] - 2026-08-06
 - **Bot DAIA (Consentimiento LOPDP)**: Se añadió un checkbox de consentimiento y aviso de privacidad obligatorio antes de iniciar el chat con el bot DAIA.
 - **Página y Footer LOPDP**: Implementación de un footer global con enlace a la "Política de Privacidad y Tratamiento de Datos Personales". La página se auto-aprovisiona en entornos de producción.
 - **Menú Intranet**: Se agregó un enlace directo a `erp.datacom.ec` ("INTRANET") en el menú de navegación principal de Elementor y WordPress.
