@@ -5,10 +5,13 @@ Todos los cambios notables de este proyecto estarán documentados en este archiv
 ## [Unreleased] - 2026-08-11
 
 ### Añadido
+- **Migración a Gemini API**: Migración completa del motor de procesamiento de lenguaje del bot DAIA de OpenAI a Google Gemini (`gemini-flash-latest`), resolviendo el bloqueo de firewall en las peticiones salientes hacia `api.openai.com` en producción.
 - **Copia de Conversación para el Cliente**: El bot DAIA ahora recopila automáticamente todo el historial del chat y envía una copia de respaldo por correo electrónico al prospecto (usando el correo capturado), agradeciéndole su interés e indicando que un asesor lo contactará.
 - **DAIA SMTP Nativo**: Se integraron las credenciales oficiales (`daia@datacom.ec`) directamente en el plugin DAIA a través del hook `phpmailer_init`, garantizando que todos los leads captados lleguen de forma confiable a `info@datacom.ec` (evitando filtros de spam o configuraciones SMTP globales).
 
 ### Modificado
+- **Posicionamiento de Banner y LOPDP**: Se envolvió el banner de cookies y la barra informativa de LOPDP en un contenedor fijo (`#ccb-fixed-wrapper`) con `position: fixed` al fondo del viewport (`bottom: 0`), asegurando visibilidad flotante inmediata sin requerir scroll.
+- **Formato de Respuesta REST del Chatbot**: Se estructuró la respuesta de la API de chat en formato de objeto `{"reply": "..."}` en lugar de un string plano, resolviendo el error de conexión visualizado en el widget de chat.
 - **Bot DAIA (Ajuste de Comportamiento)**: Se actualizaron las instrucciones del sistema (`system_prompt`) para restringir al bot de inventar información y prohibir rotundamente proporcionar datos sensibles de la empresa (correos internos, información de empleados, representante legal).
 - **Bot DAIA (Enfoque B2B)**: Se añadió una regla para que el bot rechace cordialmente las consultas sobre "internet residencial" o planes para hogares, explicando que el enfoque exclusivo de DataCom es el sector corporativo y empresarial.
 

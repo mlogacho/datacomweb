@@ -1,115 +1,244 @@
 <?php
-/**
- * Plugin Name: LOPDP Global Footer
- * Description: Inyecta de forma permanente un enlace a la Política de Privacidad en el pie de página de todo el sitio web para cumplir con la LOPDP.
- * Version: 1.0
- * Author: DataCom
- */
+/*
+Plugin Name: LOPDP Global Footer and Cookie Banner
+Description: Custom cookie banner, LOPDP footer, and logo fix for LOPDP/Cookies pages.
+Version: 5.0
+*/
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
-
-function datacom_lopdp_global_footer() {
+// Fix the site logo size on pages that use the default theme header (LOPDP, Cookies)
+add_action('wp_head', function() {
+    // Only apply on pages with default theme header (not Elementor full pages)
+    if (!is_page(['lopdp', 'cookies'])) return;
     ?>
-    <div id="lopdp-global-footer" style="
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: #f8fafc;
-        border-top: 1px solid #e2e8f0;
-        text-align: center;
-        padding: 8px 15px;
-        font-family: 'Inter', sans-serif, Arial;
-        font-size: 12px;
-        z-index: 999998; /* Just below the chat widget */
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-    ">
-        <a href="/lopdp/" target="_blank" style="color: #475569; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: color 0.2s;">
-            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            Política de Privacidad y Tratamiento de Datos Personales
-        </a>
-        <style>
-            #lopdp-global-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #ffffff; border-top: 1px solid #e2e8f0; padding: 10px 0; text-align: center; font-family: 'Inter', Arial, sans-serif; font-size: 13px; z-index: 999999; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-            #lopdp-global-footer a { color: #475569; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: color 0.2s; }
-            #lopdp-global-footer a:hover { color: #0ea5e9 !important; }
-            /* Push body up slightly so footer doesn't hide content */
-            body { padding-bottom: 45px !important; }
-            /* Push Cookie Notice banner up so it doesn't collide with the LOPDP footer */
-            #cookie-notice { margin-bottom: 40px !important; box-shadow: 0 -4px 10px rgba(0,0,0,0.2) !important; }
-            /* Unify font for site description (tagline) in legacy header */
-            .description { font-family: 'Inter', Arial, sans-serif !important; font-size: 14px !important; color: #475569 !important; font-style: normal !important; margin-top: 5px; }
-            #header { border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 25px; background: #fff; }
-            #headerimg { max-width: 800px; margin: 0 auto; padding-top: 15px; padding-left: 20px; padding-right: 20px; }
-            hr { display: none !important; } /* Hide the ghost line from theme-compat */
-            /* Justify paragraphs in LOPDP container */
-            .lopdp-container p, .lopdp-container ul { text-align: justify; }
-            /* Replace site title text with logo */
-            #headerimg h1 a {
-                display: block;
-                background: url('/wp-content/recurso-1.png') no-repeat left center;
-                background-size: contain;
-                width: 220px;
-                height: 80px;
-                text-indent: -9999px; /* Hide the text */
-                overflow: hidden;
-            }
-            #headerimg h1 { margin: 0; padding: 0; line-height: 1; }
-        </style>
-    </div>
-    <?php
-}
-add_action( 'wp_footer', 'datacom_lopdp_global_footer', 100 );
-
-// Auto-provision the LOPDP page if it doesn't exist (useful for production deployments)
-function datacom_auto_provision_lopdp_page() {
-    if ( ! get_option( 'datacom_lopdp_page_created' ) ) {
-        $page_slug = 'lopdp';
-        $page = get_page_by_path( $page_slug );
-        
-        if ( ! $page ) {
-            $html_content = <<<EOD
-<div class="lopdp-container" style="max-width: 800px; margin: 0 auto; line-height: 1.6; font-family: Arial, sans-serif;">
-    <h1 style="color: #004e92; text-align: center; margin-bottom: 20px;">Política de Protección de Datos Personales</h1>
-    <p>En <strong>DataCom S.A.</strong> respetamos su privacidad y cumplimos estrictamente con la <strong>Ley Orgánica de Protección de Datos Personales (LOPDP)</strong> de Ecuador. Esta política describe cómo recolectamos, utilizamos, protegemos y compartimos sus datos personales.</p>
-    <h2 style="color: #004e92; margin-top: 30px;">1. Principios del Tratamiento</h2>
-    <p>Tratamos sus datos basándonos en los principios de <strong>licitud, transparencia, proporcionalidad y minimización</strong>. Solo recolectamos los datos estrictamente necesarios para la prestación de nuestros servicios y la atención al cliente.</p>
-    <h2 style="color: #004e92; margin-top: 30px;">2. Derechos de los Titulares (Derechos ARCO)</h2>
-    <p>Como titular de sus datos personales, usted tiene derecho a:</p>
-    <ul>
-        <li><strong>Acceso:</strong> Conocer qué datos suyos tratamos y con qué fin.</li>
-        <li><strong>Rectificación:</strong> Actualizar o corregir datos inexactos.</li>
-        <li><strong>Cancelación / Supresión:</strong> Solicitar la eliminación de sus datos cuando ya no sean necesarios para los fines recolectados.</li>
-        <li><strong>Oposición y Limitación:</strong> Oponerse al tratamiento por motivos específicos y restringir su uso temporalmente.</li>
-        <li><strong>Portabilidad:</strong> Recibir sus datos en un formato estructurado y transferirlos.</li>
-    </ul>
-    <h2 style="color: #004e92; margin-top: 30px;">3. Tiempos de Conservación</h2>
-    <p>Los datos serán conservados únicamente durante el tiempo necesario para los fines del tratamiento o según los plazos que establezcan las leyes.</p>
-    <h2 style="color: #004e92; margin-top: 30px;">4. Medidas de Seguridad</h2>
-    <p>DataCom S.A. ha implementado medidas de seguridad técnicas y organizativas para garantizar la integridad y privacidad de su información.</p>
-    <h2 style="color: #004e92; margin-top: 30px;">5. Contacto del Delegado de Protección de Datos (DPD)</h2>
-    <p>Si tiene alguna duda sobre esta política o desea ejercer sus derechos, puede contactar a nuestro DPD:</p>
-    <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #004e92;">
-        <p><strong>DPD:</strong> Marco Logacho<br>
-        <strong>Correo Electrónico:</strong> <a href="mailto:mlogacho@datacom.net.ec">mlogacho@datacom.net.ec</a><br>
-        <strong>Teléfono:</strong> +593 999952644</p>
-    </div>
-</div>
-EOD;
-            $page_id = wp_insert_post( array(
-                'post_title'    => 'Política de Protección de Datos (LOPDP)',
-                'post_name'     => $page_slug,
-                'post_content'  => $html_content,
-                'post_status'   => 'publish',
-                'post_author'   => 1,
-                'post_type'     => 'page',
-            ) );
-            if ( ! is_wp_error( $page_id ) ) {
-                update_post_meta( $page_id, '_wp_page_template', 'elementor_header_footer' );
-            }
+    <style>
+        /* --- Header / Logo fix --- */
+        body.page-id-4775 .site-header,
+        body.page-id-4771 .site-header {
+            border-bottom: 1px solid #e0e0e0;
+            overflow: visible !important;
+            min-height: 80px;
         }
-        update_option( 'datacom_lopdp_page_created', true );
-    }
-}
-add_action( 'init', 'datacom_auto_provision_lopdp_page' );
+        body.page-id-4775 .site-branding,
+        body.page-id-4771 .site-branding {
+            display: flex !important;
+            align-items: center !important;
+            overflow: visible !important;
+            padding: 10px 0;
+        }
+        body.page-id-4775 .site-logo,
+        body.page-id-4771 .site-logo {
+            display: block !important;
+            overflow: visible !important;
+            line-height: 0;
+        }
+        body.page-id-4775 .site-logo a,
+        body.page-id-4771 .site-logo a { display: block; overflow: visible; }
+        body.page-id-4775 .site-logo img.custom-logo,
+        body.page-id-4771 .site-logo img.custom-logo {
+            width: auto !important;
+            height: 55px !important;
+            max-width: none !important;
+            display: block !important;
+        }
+        body.page-id-4775 .site-branding .site-title,
+        body.page-id-4775 .site-branding .site-description,
+        body.page-id-4771 .site-branding .site-title,
+        body.page-id-4771 .site-branding .site-description { display: none !important; }
+
+        /* --- Hide sidebar / widget area entirely --- */
+        body.page-id-4775 #secondary,
+        body.page-id-4771 #secondary,
+        body.page-id-4775 .widget-area,
+        body.page-id-4771 .widget-area { display: none !important; }
+
+        /* Full-width content when sidebar is gone */
+        body.page-id-4775 #primary,
+        body.page-id-4771 #primary {
+            width: 100% !important;
+            max-width: 100% !important;
+            float: none !important;
+        }
+
+        /* --- Fix font sizes (too large in TwentyNineteen) --- */
+        body.page-id-4775 .entry-content h1,
+        body.page-id-4771 .entry-content h1 {
+            font-size: 1.75rem !important;
+            line-height: 1.3 !important;
+            text-align: center;
+        }
+        body.page-id-4775 .entry-content h2,
+        body.page-id-4771 .entry-content h2 {
+            font-size: 1.2rem !important;
+            line-height: 1.4 !important;
+        }
+        body.page-id-4775 .entry-content h3,
+        body.page-id-4771 .entry-content h3 { font-size: 1.05rem !important; }
+        body.page-id-4775 .entry-content p,
+        body.page-id-4775 .entry-content li,
+        body.page-id-4771 .entry-content p,
+        body.page-id-4771 .entry-content li {
+            font-size: 0.95rem !important;
+            line-height: 1.7 !important;
+        }
+
+        /* Hide the WordPress-generated page title (content has its own h1) */
+        body.page-id-4775 .entry-header .entry-title,
+        body.page-id-4771 .entry-header .entry-title { display: none !important; }
+
+        /* --- Content container --- */
+        body.page-id-4775 .entry-content,
+        body.page-id-4771 .entry-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 20px 30px;
+        }
+    </style>
+    <?php
+}, 5);
+
+// Cookie banner and LOPDP footer on ALL pages
+add_action('wp_footer', function() {
+    if (is_admin()) return;
+    ?>
+    <style>
+        /* Wrapper fixed at the bottom of the viewport */
+        #ccb-fixed-wrapper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 99999;
+            width: 100%;
+        }
+        #custom-cookie-banner {
+            display: none;
+            width: 100%;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 14px 50px 14px 30px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            position: relative;
+            box-sizing: border-box;
+        }
+        #custom-cookie-banner.ccb-visible {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+        }
+        #custom-cookie-banner p {
+            margin: 0;
+            flex: 1;
+            min-width: 200px;
+            line-height: 1.5;
+        }
+        #custom-cookie-banner a.ccb-link {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        .ccb-buttons {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .ccb-btn {
+            background-color: #4dbfb0;
+            color: #ffffff;
+            border: none;
+            padding: 8px 18px;
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .ccb-btn:hover { background-color: #3ca294; }
+        .ccb-close {
+            background: none;
+            border: none;
+            color: #aaaaaa;
+            font-size: 22px;
+            cursor: pointer;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            line-height: 1;
+            padding: 5px;
+        }
+        .ccb-close:hover { color: #ffffff; }
+        .lopdp-bar {
+            width: 100%;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            padding: 10px 0;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #555555;
+            box-sizing: border-box;
+            display: block;
+        }
+        .lopdp-bar a {
+            color: #555555;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .lopdp-bar a:hover { text-decoration: underline; }
+    </style>
+
+    <div id="ccb-fixed-wrapper">
+        <div id="custom-cookie-banner">
+            <p>Utilizamos cookies para ofrecerte la mejor experiencia en nuestra web. Al continuar navegando, aceptas nuestra <a href="/lopdp/" class="ccb-link">Política de Cookies</a>.</p>
+            <div class="ccb-buttons">
+                <button class="ccb-btn" id="ccb-accept">Aceptar todas</button>
+                <button class="ccb-btn" id="ccb-refuse">Rechazar no esenciales</button>
+            </div>
+            <button class="ccb-close" id="ccb-close" aria-label="Cerrar">&#215;</button>
+        </div>
+
+        <div class="lopdp-bar">
+            <a href="/lopdp/">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l6 2.67V11c0 3.88-2.64 7.48-6 8.93C8.64 18.48 6 14.88 6 11V7.67L12 5zm-1 6v2h2v-2h-2zm0-4v3h2V7h-2z"/></svg>
+                Política de Privacidad y Tratamiento de Datos Personales
+            </a>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var COOKIE_NAME = "datacom_cookies_v2";
+        var banner = document.getElementById("custom-cookie-banner");
+        if (!banner) return;
+
+        function getCookie(name) {
+            var match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+            return match ? match[2] : null;
+        }
+
+        function setCookie(name, value, days) {
+            var d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + "; expires=" + d.toUTCString() + "; path=/; SameSite=Lax";
+        }
+
+        function dismiss() {
+            banner.classList.remove("ccb-visible");
+            banner.style.display = "none";
+            setCookie(COOKIE_NAME, "1", 30);
+        }
+
+        if (!getCookie(COOKIE_NAME)) {
+            banner.classList.add("ccb-visible");
+        }
+
+        document.getElementById("ccb-accept").addEventListener("click", dismiss);
+        document.getElementById("ccb-refuse").addEventListener("click", dismiss);
+        document.getElementById("ccb-close").addEventListener("click", dismiss);
+    })();
+    </script>
+    <?php
+}, 100);
